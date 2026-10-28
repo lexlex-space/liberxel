@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Liberxel — Tools for humans and AI agents</title>
+  <meta name="description" content="Liberxel builds tools that benefit and serve both humans and AI agents. A Hong Kong indie startup, learning in public." />
+  <meta name="theme-color" content="#f7f2e8" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Liberxel — Tools for humans and AI agents" />
+  <meta property="og:description" content="We build tools that benefit and serve both humans and AI agents. From Hong Kong — learning in public." />
+  <meta property="og:site_name" content="Liberxel" />
+  <meta property="og:image" content="logo.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Liberxel" />
+  <meta name="twitter:description" content="Tools that benefit and serve both humans and AI agents." />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="apple-touch-icon" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #f7f2e8;
+      --cream-deep: #efe8da;
+      --cream-soft: #fbf8f2;
+      --ink: #2a2722;
+      --ink-soft: #5c564c;
+      --ink-faint: #8a8378;
+      --gold: #c9a227;
+      --gold-deep: #a8861a;
+      --gold-wash: rgba(201, 162, 39, 0.12);
+      --line: rgba(42, 39, 34, 0.08);
+      --line-strong: rgba(42, 39, 34, 0.14);
+      --shadow: 0 1px 2px rgba(42, 39, 34, 0.04), 0 12px 40px rgba(42, 39, 34, 0.06);
+      --radius: 20px;
+      --radius-sm: 12px;
+      --font: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --max: 72rem;
+      --nav-h: 4.25rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* subtle paper grain */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+
+    a {
+      color: var(--gold-deep);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--ink); }
+    a:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    img { display: block; max-width: 100%; height: auto; }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: min(100% - 2.5rem, var(--max));
+      margin-inline: auto;
+    }
+
+    /* ——— Nav ——— */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: var(--nav-h);
+      background: color-mix(in srgb, var(--cream) 88%, transparent);
+      backdrop-filter: blur(14px) saturate(1.2);
+      -webkit-backdrop-filter: blur(14px) saturate(1.2);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    .brand:hover { color: inherit; }
+    .brand-mark {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 0 0 1px var(--line);
+    }
+    .brand-name {
+      font-weight: 600;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-links a:hover {
+      background: var(--cream-deep);
+      color: var(--ink);
+    }
+
+    /* ——— Hero ——— */
+    .hero {
+      padding: clamp(3.5rem, 10vw, 7rem) 0 clamp(3rem, 8vw, 5.5rem);
+      text-align: center;
+    }
+    .hero-logo {
+      width: clamp(7.5rem, 18vw, 10rem);
+      height: clamp(7.5rem, 18vw, 10rem);
+      margin: 0 auto 1.75rem;
+      border-radius: 28px;
+      object-fit: cover;
+      box-shadow: var(--shadow), 0 0 0 1px var(--line);
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 3.75rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 0.85rem;
+    }
+    .hero-tag {
+      font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+      font-weight: 400;
+      color: var(--ink-soft);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.35rem;
+    }
+    .hero-tag-cn {
+      font-size: 0.95rem;
+      color: var(--ink-faint);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      margin-bottom: 2.25rem;
+    }
+    .hero-lede {
+      max-width: 34rem;
+      margin: 0 auto 2.5rem;
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+    .scroll-cue {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      color: var(--ink-faint);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .scroll-cue:hover { color: var(--ink-soft); }
+    .scroll-cue svg {
+      width: 1.1rem;
+      height: 1.1rem;
+      animation: bob 2.2s ease-in-out infinite;
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    /* ——— Sections ——— */
+    section {
+      padding: clamp(3.5rem, 8vw, 5.5rem) 0;
+    }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-deep);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(1.75rem, 3.5vw, 2.35rem);
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+      max-width: 22ch;
+    }
+    .section-body {
+      max-width: 38rem;
+      font-size: 1.08rem;
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+    .section-body + .section-body { margin-top: 1.1rem; }
+    .section-body strong { color: var(--ink); font-weight: 560; }
+
+    .vision {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--cream-soft);
+    }
+    .vision-grid {
+      display: grid;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    @media (min-width: 800px) {
+      .vision-grid {
+        grid-template-columns: 1fr 1.15fr;
+        gap: 4rem;
+      }
+    }
+    .vision-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      margin-top: 0.5rem;
+    }
+    .vision-points li {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.85rem;
+      align-items: start;
+      font-size: 1rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .vision-points .dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      margin-top: 0.55rem;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ——— Shipping ——— */
+    .shipping-card {
+      max-width: 36rem;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      padding: clamp(1.5rem, 4vw, 2rem);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 1.25rem;
+    }
+    @media (min-width: 560px) {
+      .shipping-card {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+      }
+    }
+    .shipping-kicker {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 0.4rem;
+    }
+    .shipping-card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+    .shipping-card p {
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.7rem 1.25rem;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 560;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-ghost {
+      background: var(--cream);
+      color: var(--ink);
+      border: 1px solid var(--line-strong);
+    }
+    .btn-ghost:hover {
+      background: var(--cream-deep);
+      color: var(--ink);
+      box-shadow: 0 2px 8px rgba(42, 39, 34, 0.06);
+    }
+
+
+
+    /* ——— About ——— */
+    .about {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--cream-soft);
+    }
+    .about-grid {
+      display: grid;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    @media (min-width: 800px) {
+      .about-grid {
+        grid-template-columns: 1fr 1.15fr;
+        gap: 4rem;
+      }
+    }
+    .about .section-body + .section-body {
+      margin-top: 1rem;
+    }
+
+    /* ——— Contact ——— */
+    .contact {
+      border-top: 1px solid var(--line);
+      background: var(--cream-soft);
+    }
+    .contact-intro {
+      max-width: 36rem;
+      margin: 0 auto 2rem;
+      text-align: center;
+    }
+    .contact-intro .section-title {
+      margin-inline: auto;
+    }
+    .contact-intro p {
+      margin-top: 0.85rem;
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .contact-grid {
+      list-style: none;
+      display: grid;
+      gap: 0.85rem;
+      max-width: 36rem;
+      margin: 0 auto;
+    }
+    @media (min-width: 560px) {
+      .contact-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .contact-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      background: #fff;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-sm);
+      padding: 1.15rem 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    a.contact-card:hover {
+      border-color: rgba(201, 162, 39, 0.45);
+      box-shadow: var(--shadow);
+      color: inherit;
+    }
+    .contact-card .k {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .contact-card .v {
+      font-size: 1rem;
+      font-weight: 550;
+      color: var(--ink);
+      word-break: break-word;
+    }
+    .contact-card.span-2 {
+      grid-column: 1 / -1;
+    }
+
+    /* ——— Footer ——— */
+    .footer {
+      padding: 2.5rem 0 3rem;
+      border-top: 1px solid var(--line);
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .footer-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      text-decoration: none;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .footer-brand:hover { color: var(--ink); }
+    .footer-brand img {
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+    .footer-meta {
+      font-size: 0.85rem;
+      color: var(--ink-faint);
+    }
+    .footer-meta a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .footer-meta a:hover { color: var(--ink-soft); }
+
+    @media (max-width: 560px) {
+      .nav-links { display: none; }
+      .wrap { width: min(100% - 1.75rem, var(--max)); }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="Liberxel home">
+        <img class="brand-mark" src="logo.png" width="36" height="36" alt="" />
+        <span class="brand-name">Liberxel</span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#shipping">Shipping</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <img class="hero-logo" src="logo.png" width="160" height="160" alt="Liberxel logo — lowercase lx with a gold accent" />
+        <h1>Liberxel</h1>
+        <p class="hero-tag">Tools for humans and AI agents</p>
+        <p class="hero-tag-cn" lang="zh-Hant">為人與 AI agent 而建</p>
+        <p class="hero-lede">
+          A Hong Kong indie startup building tools that benefit and serve
+          both people and the AI agents that work alongside them.
+        </p>
+        <a class="scroll-cue" href="#about" aria-label="Scroll to about">
+          About
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </a>
+      </div>
+    </section>
+
+
+
+
+
+    <section class="about vision" id="about">
+      <div class="wrap about-grid vision-grid">
+        <div>
+          <span class="section-label">About</span>
+          <h2 class="section-title">Build tools that benefit and serve both humans and AI agents.</h2>
+        </div>
+        <div>
+          <p class="section-body">
+            Liberxel is an indie startup from Hong Kong. Most software is still designed
+            for one audience — we build for two: the people who need the outcome, and the
+            AI agents that help get it done.
+          </p>
+          <p class="section-body">
+            Humans and AI agents are <strong>peers</strong> here: different strengths,
+            shared goals. We ship honest work, learn in public, and keep the brand simple —
+            useful tools, clear intent, no hype.
+          </p>
+          <ul class="vision-points">
+            <li>
+              <span class="dot" aria-hidden="true"></span>
+              <span>Serve people with clear outcomes — not opaque black boxes.</span>
+            </li>
+            <li>
+              <span class="dot" aria-hidden="true"></span>
+              <span>Serve agents with structure they can actually use and finish.</span>
+            </li>
+            <li>
+              <span class="dot" aria-hidden="true"></span>
+              <span>Every tool should leave both sides better off.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="shipping">
+      <div class="wrap" style="text-align: center; margin-bottom: 2rem;">
+        <span class="section-label">Currently shipping</span>
+        <h2 class="section-title" style="margin-inline: auto; max-width: 32ch;">
+          A workflow people and agents can both use.
+        </h2>
+      </div>
+      <div class="wrap">
+        <article class="shipping-card">
+          <div>
+            <p class="shipping-kicker">n8n · Gmail → Sheets + Slack</p>
+            <h3>Invoice PDF workflow</h3>
+            <p>
+              Pull invoice PDFs from Gmail, log them to Google Sheets, and nudge Slack —
+              a weekly chore, handled. Available on Gumroad.
+            </p>
+          </div>
+          <a class="btn btn-ghost" href="https://tungfud.gumroad.com/l/bjqgdz" rel="noopener noreferrer" target="_blank">
+            View on Gumroad
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+              <path d="M7 17L17 7M9 7h8v8" />
+            </svg>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="wrap">
+        <div class="contact-intro">
+          <span class="section-label">Contact</span>
+          <h2 class="section-title">Say hello</h2>
+          <p>Questions, ideas, or collaboration — we read every note.</p>
+        </div>
+        <ul class="contact-grid">
+          <li>
+            <a class="contact-card" href="mailto:tungfud@gmail.com">
+              <span class="k">Email</span>
+              <span class="v">tungfud@gmail.com</span>
+            </a>
+          </li>
+          <li>
+            <a class="contact-card" href="https://x.com/Lexlex717" rel="noopener noreferrer" target="_blank">
+              <span class="k">X</span>
+              <span class="v">@Lexlex717</span>
+            </a>
+          </li>
+          <li class="span-2">
+            <div class="contact-card" aria-label="Location">
+              <span class="k">Location</span>
+              <span class="v">Hong Kong</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <a class="footer-brand" href="#top">
+        <img src="logo.png" width="26" height="26" alt="" />
+        Liberxel
+      </a>
+      <p class="footer-meta">
+        Hong Kong ·
+        <a href="mailto:tungfud@gmail.com">Contact</a>
+        ·
+        <a href="https://x.com/Lexlex717" rel="noopener noreferrer" target="_blank">X</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
